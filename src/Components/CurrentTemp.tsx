@@ -1,16 +1,13 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 export default function CurrentTemp() {
   const [currentTemp, setCurrentTemp] = useState<number>(0)
-  const [currentLocation, setCurrentLocation] = useState<string>("")
+  const [currentLocation, setCurrentLocation] = useState<string | null>(null)
 
   function handleClick(location: string) {
     setCurrentTemp(data[location].data[0].temp)
     setCurrentLocation(data[location].data[0].city_name)
-  }
-
-  function clickThroughToLocation(location: string) {
-    console.log({ location })
   }
 
   function createLocationButtons() {
@@ -28,11 +25,13 @@ export default function CurrentTemp() {
     <div>
       <div>{createLocationButtons()}</div>
       <div className="current-temp-container">
-        <div>{currentLocation}</div>
-        <div>{currentTemp}</div>
-        <button onClick={() => clickThroughToLocation(currentLocation)}>
-          Click for 16 day forecast
-        </button>
+        <div>Location: {currentLocation}</div>
+        <div>Current temperature: {currentTemp}</div>
+        {currentLocation && (
+          <Link to={"/forecasted"} state={{ currentLocation: currentLocation }}>
+            Click for 16 day forecast for {currentLocation}
+          </Link>
+        )}
       </div>
     </div>
   )
