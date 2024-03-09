@@ -2,12 +2,15 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 
 export default function CurrentTemp() {
+  // CONSIDER HOW TO INITIALISE CURRENTTEMP AND CURRENTLOCATION
   const [currentTemp, setCurrentTemp] = useState<number>(0)
-  const [currentLocation, setCurrentLocation] = useState<string | null>(null)
+  const [currentLocation, setCurrentLocation] = useState<string>("London")
 
   function handleClick(location: string) {
-    setCurrentTemp(data[location].data[0].temp)
-    setCurrentLocation(data[location].data[0].city_name)
+    const { temp, city_name }: { temp: number; city_name: string } =
+      data[location].data[0]
+    setCurrentTemp(temp)
+    setCurrentLocation(city_name)
   }
 
   function createLocationButtons() {
@@ -24,14 +27,12 @@ export default function CurrentTemp() {
   return (
     <div>
       <div>{createLocationButtons()}</div>
-      <div className="current-temp-container">
+      <div>
         <div>Location: {currentLocation}</div>
         <div>Current temperature: {currentTemp}</div>
-        {currentLocation && (
-          <Link to={"/forecasted"} state={{ currentLocation: currentLocation }}>
-            Click for 16 day forecast for {currentLocation}
-          </Link>
-        )}
+        <Link to={"/forecasted"} state={{ currentLocation: currentLocation }}>
+          Click for 16 day forecast for {currentLocation}
+        </Link>
       </div>
     </div>
   )
@@ -42,7 +43,7 @@ interface Data {
   [key: string]: any
 }
 
-export const data: Data = {
+const data: Data = {
   London: {
     count: 1,
     data: [

@@ -1,4 +1,4 @@
-import "./App.css"
+import "./CSS/App.css"
 import CurrentTemp from "./Components/CurrentTemp"
 import ForecastedTemp from "./Components/ForecastedTemp"
 import { BrowserRouter } from "react-router-dom"
