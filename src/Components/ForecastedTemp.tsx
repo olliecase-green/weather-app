@@ -17,7 +17,7 @@ export default function ForecastedTemp() {
   function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
     const { name, value } = event.target
     const tempFloat = parseFloat(value)
-    const temp = isNaN(tempFloat) ? 0 : tempFloat
+    const temp = isNaN(tempFloat) ? null : tempFloat
     setInputValues((prevState) => ({
       ...prevState,
       [name]: temp,
