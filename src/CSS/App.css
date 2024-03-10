@@ -1,1 +1,10 @@
-
+.title {
+  text-align: center;
+  background-color: #183b54;
+  color: #fff;
+  height: 60px;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

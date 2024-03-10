@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom"
-import { useState, ChangeEvent, useEffect } from "react"
+import { useState, ChangeEvent } from "react"
 import "../CSS/ForecastedTemp.css"
 
 export default function ForecastedTemp() {
@@ -29,49 +29,51 @@ export default function ForecastedTemp() {
     const forecastedData: any[] = data["London"].data
     return forecastedData.map((item, index) => {
       const { temp }: { temp: number } = item
+      // POTENTIALLY MOVE BELOW INTO FUNCTION
       if (
         (inputValues.minTemp === null || temp > inputValues.minTemp) &&
         (inputValues.maxTemp === null || temp < inputValues.maxTemp)
       ) {
         return (
           <div>
-            Day: {index + 1} - {item.temp} degrees
+            Day {index + 1}: {item.temp}°
           </div>
         )
-      }
+      } else return null
     })
+  }
+
+  function displayInputText(value: number | null) {
+    return value !== null ? value.toString() : ""
   }
 
   return (
     <div>
-      <div>{currentLocation}</div>
-      <div>{displayForecast()}</div>
-      <div className="input-container">
-        <div className="min-input-container">
-          <div>
-            Enter a minimum temperature to see which days will exceed this
-          </div>
-          <input
-            type="number"
-            name="minTemp"
-            value={
-              inputValues.minTemp !== null ? inputValues.minTemp.toString() : ""
-            }
-            onChange={handleInputChange}
-          />
+      <div className="forecast-title">{currentLocation}</div>
+      <div className="main-container">
+        <div className="forecast-container">
+          <div>16 day forecast</div>
+          <div>{displayForecast()}</div>
         </div>
-        <div className="max-input-container">
-          <div>
-            Enter a maximum temperature to see which days will not exceed this
+        <div className="input-container">
+          <div className="min-input-container">
+            <div>Minimum temperature</div>
+            <input
+              type="number"
+              name="minTemp"
+              value={displayInputText(inputValues.minTemp)}
+              onChange={handleInputChange}
+            />
           </div>
-          <input
-            type="number"
-            name="maxTemp"
-            value={
-              inputValues.maxTemp !== null ? inputValues.maxTemp.toString() : ""
-            }
-            onChange={handleInputChange}
-          />
+          <div className="max-input-container">
+            <div>Maximum temperature</div>
+            <input
+              type="number"
+              name="maxTemp"
+              value={displayInputText(inputValues.maxTemp)}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -1,3 +1,20 @@
+.forecast-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+.forecast-container {
+  margin: 0 8px 0 0;
+}
+
 .input-container {
   display: flex;
+  flex-direction: column;
 }

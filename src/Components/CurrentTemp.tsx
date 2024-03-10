@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import "../CSS/CurrentTemp.css"
 
 export default function CurrentTemp() {
   // CONSIDER HOW TO INITIALISE CURRENTTEMP AND CURRENTLOCATION
@@ -17,7 +18,11 @@ export default function CurrentTemp() {
     const locations = ["London", "New York", "Mumbai", "Sydney", "Tokyo"]
     return locations.map((location) => {
       return (
-        <button key={location} onClick={() => handleClick(location)}>
+        <button
+          className="location-button"
+          key={location}
+          onClick={() => handleClick(location)}
+        >
           {location}
         </button>
       )
@@ -25,14 +30,21 @@ export default function CurrentTemp() {
   }
 
   return (
-    <div>
-      <div>{createLocationButtons()}</div>
-      <div>
-        <div>Location: {currentLocation}</div>
-        <div>Current temperature: {currentTemp}</div>
-        <Link to={"/forecasted"} state={{ currentLocation: currentLocation }}>
-          Click for 16 day forecast for {currentLocation}
-        </Link>
+    <div className="current-temp-container">
+      <div className="location-buttons">{createLocationButtons()}</div>
+      <div className="current-temp-info-container">
+        <div className="current-temp-info">
+          <div className="current-location">{currentLocation}</div>
+          <div className="current-temp">{currentTemp}°</div>
+        </div>
+        <div className="link-container">
+          <Link
+            to={`/${currentLocation}/forecasted`}
+            state={{ currentLocation: currentLocation }}
+          >
+            16 day forecast
+          </Link>
+        </div>
       </div>
     </div>
   )
