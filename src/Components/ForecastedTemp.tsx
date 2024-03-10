@@ -1,24 +1,38 @@
 import { useLocation } from "react-router-dom"
-import { useState, ChangeEvent } from "react"
+import { useState, ChangeEvent, useEffect } from "react"
+import "../CSS/ForecastedTemp.css"
 
 export default function ForecastedTemp() {
-  const [inputValue, setInputValue] = useState<number>(0)
+  const [inputValues, setInputValues] = useState<{
+    [key: string]: number | null
+  }>({
+    minTemp: null,
+    maxTemp: null,
+  })
 
   // WORK OUT HOW TO STORE THESE
   const location = useLocation()
   const { currentLocation }: { currentLocation: string } = location.state
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
-    const tempFloat = parseFloat(event.target.value)
+    const { name, value } = event.target
+    const tempFloat = parseFloat(value)
     const temp = isNaN(tempFloat) ? 0 : tempFloat
-    setInputValue(temp)
+    setInputValues((prevState) => ({
+      ...prevState,
+      [name]: temp,
+    }))
   }
 
   function displayForecast() {
     // UPDATE ANY ARRAY TYPE
     const forecastedData: any[] = data["London"].data
     return forecastedData.map((item, index) => {
-      if (item.temp > inputValue) {
+      const { temp }: { temp: number } = item
+      if (
+        (inputValues.minTemp === null || temp > inputValues.minTemp) &&
+        (inputValues.maxTemp === null || temp < inputValues.maxTemp)
+      ) {
         return (
           <div>
             Day: {index + 1} - {item.temp} degrees
@@ -32,12 +46,34 @@ export default function ForecastedTemp() {
     <div>
       <div>{currentLocation}</div>
       <div>{displayForecast()}</div>
-      Enter a minimum temperature to see which days will exceed this
-      <input
-        type="number"
-        value={inputValue.toString()}
-        onChange={handleInputChange}
-      />
+      <div className="input-container">
+        <div className="min-input-container">
+          <div>
+            Enter a minimum temperature to see which days will exceed this
+          </div>
+          <input
+            type="number"
+            name="minTemp"
+            value={
+              inputValues.minTemp !== null ? inputValues.minTemp.toString() : ""
+            }
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="max-input-container">
+          <div>
+            Enter a maximum temperature to see which days will not exceed this
+          </div>
+          <input
+            type="number"
+            name="maxTemp"
+            value={
+              inputValues.maxTemp !== null ? inputValues.maxTemp.toString() : ""
+            }
+            onChange={handleInputChange}
+          />
+        </div>
+      </div>
     </div>
   )
 }
