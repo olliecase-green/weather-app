@@ -47,6 +47,7 @@ export default function ForecastedTemp() {
     })
 
     const daysInTempRange = mappedData.some((data) => data !== null)
+
     return daysInTempRange ? (
       mappedData
     ) : (

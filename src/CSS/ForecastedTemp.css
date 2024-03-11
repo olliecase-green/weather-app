@@ -11,8 +11,12 @@
 }
 
 .forecast-container {
-  margin: 0 16px 0 0;
+  margin: 0 8px 0 0;
   width: 105px;
+  background: #3f5f7a;
+  color: #fff;
+  border-radius: 3px;
+  padding: 8px;
 }
 
 .input-container {
@@ -22,7 +26,7 @@
 }
 
 .input-description {
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   border-radius: 3px;
   padding: 8px;
   background: #f0f0f0;
@@ -45,7 +49,6 @@
 
 .forecast-container-title {
   font-weight: bold;
-  border-bottom: 1px solid black;
   margin: 0 0 4px 0;
 }
 
