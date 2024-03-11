@@ -1,19 +1,16 @@
-import { useLocation } from "react-router-dom"
+import { useLocation, Link } from "react-router-dom"
 import { useState, ChangeEvent } from "react"
+import { ForecastedTempState } from "../Config/config"
 import "../CSS/ForecastedTemp.css"
 
-interface ForecastedTempState {
-  minTemp: number | null
-  maxTemp: number | null
-}
-
 export default function ForecastedTemp() {
-  const [inputTemps, setInputTemps] = useState<ForecastedTempState>({
-    minTemp: null,
-    maxTemp: null,
-  })
+  const [forecastedTempState, setForecastedTempState] =
+    useState<ForecastedTempState>({
+      minTemp: null,
+      maxTemp: null,
+      currentLocation: null,
+    })
 
-  // WORK OUT HOW TO STORE THESE
   const location = useLocation()
   const { currentLocation }: { currentLocation: string } = location.state
 
@@ -21,7 +18,7 @@ export default function ForecastedTemp() {
     const { name, value } = event.target
     const tempFloat = parseFloat(value)
     const temp = isNaN(tempFloat) ? null : tempFloat
-    setInputTemps((prevState) => ({
+    setForecastedTempState((prevState) => ({
       ...prevState,
       [name]: temp,
     }))
@@ -32,12 +29,11 @@ export default function ForecastedTemp() {
     const forecastedData: any[] = data["London"].data
     const mappedData = forecastedData.map((item, index) => {
       const { temp }: { temp: number } = item
-      const { minTemp, maxTemp } = inputTemps
+      const { minTemp, maxTemp } = forecastedTempState
       const aboveMinTemp = minTemp === null || temp > minTemp
       const belowMaxTemp = maxTemp === null || temp < maxTemp
 
       if (!aboveMinTemp || !belowMaxTemp) return null
-
       return (
         <div className="temp-info">
           <div>Day {index + 1}</div>
@@ -47,7 +43,6 @@ export default function ForecastedTemp() {
     })
 
     const daysInTempRange = mappedData.some((data) => data !== null)
-
     return daysInTempRange ? (
       mappedData
     ) : (
@@ -77,7 +72,7 @@ export default function ForecastedTemp() {
               className="temp-input"
               type="number"
               name="minTemp"
-              value={displayInputText(inputTemps.minTemp)}
+              value={displayInputText(forecastedTempState.minTemp)}
               onChange={handleInputChange}
             />
           </div>
@@ -87,9 +82,12 @@ export default function ForecastedTemp() {
               className="temp-input"
               type="number"
               name="maxTemp"
-              value={displayInputText(inputTemps.maxTemp)}
+              value={displayInputText(forecastedTempState.maxTemp)}
               onChange={handleInputChange}
             />
+          </div>
+          <div className="forecast-link-container">
+            <Link to={"/"}>View other cities</Link>
           </div>
         </div>
       </div>

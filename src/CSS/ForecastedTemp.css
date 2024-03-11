@@ -57,6 +57,12 @@
   justify-content: space-between;
 }
 
+.forecast-link-container {
+  font-size: 20px;
+  text-align: center;
+  margin: 16px 0 0 0;
+}
+
 @media screen and (min-width: 420px) {
   .input-container {
     width: 300px;

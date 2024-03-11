@@ -1,14 +1,8 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { locations } from "../Config/config"
+import { locations, CurrentTempState } from "../Config/config"
+import { testApiCall } from "../Functions/apiFunctions"
 import "../CSS/CurrentTemp.css"
-
-interface CurrentTempState {
-  currentTemp: number | null
-  currentLocation: string | null
-  locationSelected: boolean
-  locations: string[]
-}
 
 export default function CurrentTemp() {
   const [currentTempState, setCurrentTempState] = useState<CurrentTempState>({
@@ -18,9 +12,16 @@ export default function CurrentTemp() {
     locations: locations,
   })
 
-  function handleClick(location: string) {
+  // TEST STATE
+  // const [total, setTotal] = useState<number>(0)
+
+  async function handleClick(location: string, index: number) {
     const { temp, city_name }: { temp: number; city_name: string } =
       data[location].data[0]
+
+    const res = await testApiCall(index + 1)
+    const total = res.total
+    console.log(total)
 
     setCurrentTempState((prevState) => ({
       ...prevState,
@@ -31,12 +32,12 @@ export default function CurrentTemp() {
   }
 
   function createLocationButtons() {
-    return locations.map((location) => {
+    return locations.map((location, index) => {
       return (
         <button
           className="location-button"
           key={location}
-          onClick={() => handleClick(location)}
+          onClick={() => handleClick(location, index)}
         >
           {location}
         </button>
@@ -52,7 +53,7 @@ export default function CurrentTemp() {
           <div className="current-location">{currentLocation}</div>
           <div className="current-temp">{currentTemp}°</div>
         </div>
-        <div className="link-container">
+        <div className="current-link-container">
           <Link
             to={`/${currentLocation}/forecasted`}
             state={{ currentLocation: currentLocation }}
