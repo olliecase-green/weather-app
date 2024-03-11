@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom"
-import { useState, ChangeEvent } from "react"
-import { ForecastedTempState } from "../Config/config"
+import { useState, useEffect, ChangeEvent } from "react"
+import { ForecastedTempState, NumberOrNull } from "../Config/config"
 import "../CSS/ForecastedTemp.css"
 
 export default function ForecastedTemp() {
@@ -50,7 +50,7 @@ export default function ForecastedTemp() {
     )
   }
 
-  function displayInputText(value: number | null) {
+  function displayInputText(value: NumberOrNull) {
     return value !== null ? value.toString() : ""
   }
 
