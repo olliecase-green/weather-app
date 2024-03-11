@@ -30,21 +30,28 @@ export default function ForecastedTemp() {
   function displayForecast() {
     // UPDATE ANY ARRAY TYPE
     const forecastedData: any[] = data["London"].data
-    return forecastedData.map((item, index) => {
+    const mappedData = forecastedData.map((item, index) => {
       const { temp }: { temp: number } = item
-      // POTENTIALLY MOVE BELOW INTO FUNCTION
-      if (
-        (inputTemps.minTemp === null || temp > inputTemps.minTemp) &&
-        (inputTemps.maxTemp === null || temp < inputTemps.maxTemp)
-      ) {
-        return (
-          <div className="temp-info">
-            <div>Day {index + 1}</div>
-            <div>{item.temp}°</div>
-          </div>
-        )
-      } else return null
+      const { minTemp, maxTemp } = inputTemps
+      const aboveMinTemp = minTemp === null || temp > minTemp
+      const belowMaxTemp = maxTemp === null || temp < maxTemp
+
+      if (!aboveMinTemp || !belowMaxTemp) return null
+
+      return (
+        <div className="temp-info">
+          <div>Day {index + 1}</div>
+          <div>{item.temp}°</div>
+        </div>
+      )
     })
+
+    const daysInTempRange = mappedData.some((data) => data !== null)
+    return daysInTempRange ? (
+      mappedData
+    ) : (
+      <div>No days in temperature range!</div>
+    )
   }
 
   function displayInputText(value: number | null) {
@@ -64,7 +71,7 @@ export default function ForecastedTemp() {
             Create a temperature range using the filters below.
           </div>
           <div className="min-input-container">
-            <div>Minimum temperature</div>
+            <div>Min. temperature</div>
             <input
               className="temp-input"
               type="number"
@@ -74,7 +81,7 @@ export default function ForecastedTemp() {
             />
           </div>
           <div className="max-input-container">
-            <div>Maximum temperature</div>
+            <div>Max. temperature</div>
             <input
               className="temp-input"
               type="number"

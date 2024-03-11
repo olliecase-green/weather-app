@@ -11,7 +11,6 @@ interface CurrentTempState {
 }
 
 export default function CurrentTemp() {
-  // CONSIDER HOW TO INITIALISE CURRENTTEMP AND CURRENTLOCATION
   const [currentTempState, setCurrentTempState] = useState<CurrentTempState>({
     currentTemp: null,
     currentLocation: null,

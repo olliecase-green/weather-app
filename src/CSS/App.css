@@ -3,8 +3,18 @@
   background-color: #183b54;
   color: #fff;
   height: 70px;
-  font-size: 32px;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.content {
+  padding: 0 8px;
+}
+
+@media screen and (min-width: 420px) {
+  .title {
+    font-size: 32px;
+  }
 }
