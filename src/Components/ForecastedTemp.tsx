@@ -1,6 +1,12 @@
 import { useLocation, Link } from "react-router-dom"
 import { useState, useEffect, ChangeEvent } from "react"
-import { ForecastedTempState, NumberOrNull } from "../Config/config"
+import {
+  ForecastedTempState,
+  ForecastWeatherDay,
+  LocationState,
+  NumberOrNull,
+} from "../Config/config"
+import { fetchLocationTemp } from "../Functions/apiFunctions"
 import "../CSS/ForecastedTemp.css"
 
 export default function ForecastedTemp() {
@@ -9,10 +15,27 @@ export default function ForecastedTemp() {
       minTemp: null,
       maxTemp: null,
       currentLocation: null,
+      forecastData: [],
     })
-
   const location = useLocation()
-  const { currentLocation }: { currentLocation: string } = location.state
+  const { currentLocation, currentLongitude, currentLatitude }: LocationState =
+    location.state
+
+  useEffect(() => {
+    async function getLocationData() {
+      const forecastData = await fetchLocationTemp(
+        "https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily",
+        currentLongitude,
+        currentLatitude
+      )
+      console.log(forecastData)
+      setForecastedTempState((prevState) => ({
+        ...prevState,
+        forecastData: forecastData,
+      }))
+    }
+    getLocationData()
+  }, [])
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
@@ -26,28 +49,30 @@ export default function ForecastedTemp() {
 
   function displayForecast() {
     // UPDATE ANY ARRAY TYPE
-    const forecastedData: any[] = data["London"].data
-    const mappedData = forecastedData.map((item, index) => {
-      const { temp }: { temp: number } = item
-      const { minTemp, maxTemp } = forecastedTempState
-      const aboveMinTemp = minTemp === null || temp > minTemp
-      const belowMaxTemp = maxTemp === null || temp < maxTemp
+    const forecastedData: ForecastWeatherDay[] =
+      forecastedTempState?.forecastData?.data?.data
+    if (forecastedData) {
+      const mappedData = forecastedData.map((item, index) => {
+        const { temp }: { temp: number } = item
+        const { minTemp, maxTemp } = forecastedTempState
+        const aboveMinTemp = minTemp === null || temp > minTemp
+        const belowMaxTemp = maxTemp === null || temp < maxTemp
+        if (!aboveMinTemp || !belowMaxTemp) return null
+        return (
+          <div key={item.ts} className="temp-info">
+            <div>Day {index + 1}</div>
+            <div>{item.temp}°</div>
+          </div>
+        )
+      })
 
-      if (!aboveMinTemp || !belowMaxTemp) return null
-      return (
-        <div className="temp-info">
-          <div>Day {index + 1}</div>
-          <div>{item.temp}°</div>
-        </div>
+      const daysInTempRange = mappedData.some((data: any) => data !== null)
+      return daysInTempRange ? (
+        mappedData
+      ) : (
+        <div>No days in temperature range!</div>
       )
-    })
-
-    const daysInTempRange = mappedData.some((data) => data !== null)
-    return daysInTempRange ? (
-      mappedData
-    ) : (
-      <div>No days in temperature range!</div>
-    )
+    }
   }
 
   function displayInputText(value: NumberOrNull) {

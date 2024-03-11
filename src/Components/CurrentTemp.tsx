@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { locations, CurrentTempState, NumberOrNull } from "../Config/config"
 import { fetchLocationTemp } from "../Functions/apiFunctions"
@@ -8,7 +8,8 @@ export default function CurrentTemp() {
   const [currentTempState, setCurrentTempState] = useState<CurrentTempState>({
     currentTemp: null,
     currentLocation: null,
-    locationSelected: false,
+    currentLongitude: null,
+    currentLatitude: null,
     London: null,
     "New York": null,
     Mumbai: null,
@@ -16,17 +17,38 @@ export default function CurrentTemp() {
     Tokyo: null,
   })
 
+  useEffect(() => {
+    const currentLocation = currentTempState.currentLocation
+    if (currentLocation) {
+      const loc = locations.find(
+        (location) => location.name === currentLocation
+      )
+      if (loc) {
+        const lon = loc.lon
+        const lat = loc.lat
+        setCurrentTempState((prevState) => ({
+          ...prevState,
+          currentLongitude: lon,
+          currentLatitude: lat,
+        }))
+      }
+    }
+  }, [currentTempState.currentLocation])
+
   async function handleClick(location: string, lon: string, lat: string) {
     // Data does not exist in state
     if (!currentTempState[location]) {
-      const data = await fetchLocationTemp(lon, lat)
+      const data = await fetchLocationTemp(
+        "https://weatherbit-v1-mashape.p.rapidapi.com/current",
+        lon,
+        lat
+      )
       const { temp, city_name }: { temp: number; city_name: string } =
         data?.data?.data?.[0]
       setCurrentTempState((prevState) => ({
         ...prevState,
         currentTemp: temp,
         currentLocation: city_name,
-        locationSelected: true,
         [location]: temp,
       }))
     } else {
@@ -56,8 +78,9 @@ export default function CurrentTemp() {
   }
 
   function displayTemperature() {
-    const { currentLocation, currentTemp, locationSelected } = currentTempState
-    return locationSelected ? (
+    const { currentLocation, currentTemp, currentLongitude, currentLatitude } =
+      currentTempState
+    return currentLocation ? (
       <>
         <div className="current-temp-info">
           <div className="current-location">{currentLocation}</div>
@@ -66,7 +89,11 @@ export default function CurrentTemp() {
         <div className="current-link-container">
           <Link
             to={`/${currentLocation}/forecasted`}
-            state={{ currentLocation: currentLocation }}
+            state={{
+              currentLocation: currentLocation,
+              currentLongitude: currentLongitude,
+              currentLatitude: currentLatitude,
+            }}
           >
             16 day forecast
           </Link>
