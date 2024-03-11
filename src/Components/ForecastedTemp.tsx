@@ -2,10 +2,13 @@ import { useLocation } from "react-router-dom"
 import { useState, ChangeEvent } from "react"
 import "../CSS/ForecastedTemp.css"
 
+interface ForecastedTempState {
+  minTemp: number | null
+  maxTemp: number | null
+}
+
 export default function ForecastedTemp() {
-  const [inputValues, setInputValues] = useState<{
-    [key: string]: number | null
-  }>({
+  const [inputTemps, setInputTemps] = useState<ForecastedTempState>({
     minTemp: null,
     maxTemp: null,
   })
@@ -14,11 +17,11 @@ export default function ForecastedTemp() {
   const location = useLocation()
   const { currentLocation }: { currentLocation: string } = location.state
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
     const tempFloat = parseFloat(value)
     const temp = isNaN(tempFloat) ? null : tempFloat
-    setInputValues((prevState) => ({
+    setInputTemps((prevState) => ({
       ...prevState,
       [name]: temp,
     }))
@@ -31,12 +34,13 @@ export default function ForecastedTemp() {
       const { temp }: { temp: number } = item
       // POTENTIALLY MOVE BELOW INTO FUNCTION
       if (
-        (inputValues.minTemp === null || temp > inputValues.minTemp) &&
-        (inputValues.maxTemp === null || temp < inputValues.maxTemp)
+        (inputTemps.minTemp === null || temp > inputTemps.minTemp) &&
+        (inputTemps.maxTemp === null || temp < inputTemps.maxTemp)
       ) {
         return (
-          <div>
-            Day {index + 1}: {item.temp}°
+          <div className="temp-info">
+            <div>Day {index + 1}</div>
+            <div>{item.temp}°</div>
           </div>
         )
       } else return null
@@ -52,25 +56,30 @@ export default function ForecastedTemp() {
       <div className="forecast-title">{currentLocation}</div>
       <div className="main-container">
         <div className="forecast-container">
-          <div>16 day forecast</div>
+          <div className="forecast-container-title">Next 16 days:</div>
           <div>{displayForecast()}</div>
         </div>
         <div className="input-container">
+          <div className="input-description">
+            Create a temperature range using the filters below.
+          </div>
           <div className="min-input-container">
             <div>Minimum temperature</div>
             <input
+              className="temp-input"
               type="number"
               name="minTemp"
-              value={displayInputText(inputValues.minTemp)}
+              value={displayInputText(inputTemps.minTemp)}
               onChange={handleInputChange}
             />
           </div>
           <div className="max-input-container">
             <div>Maximum temperature</div>
             <input
+              className="temp-input"
               type="number"
               name="maxTemp"
-              value={displayInputText(inputValues.maxTemp)}
+              value={displayInputText(inputTemps.maxTemp)}
               onChange={handleInputChange}
             />
           </div>

@@ -1,21 +1,37 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { locations } from "../Config/config"
 import "../CSS/CurrentTemp.css"
+
+interface CurrentTempState {
+  currentTemp: number | null
+  currentLocation: string | null
+  locationSelected: boolean
+  locations: string[]
+}
 
 export default function CurrentTemp() {
   // CONSIDER HOW TO INITIALISE CURRENTTEMP AND CURRENTLOCATION
-  const [currentTemp, setCurrentTemp] = useState<number>(0)
-  const [currentLocation, setCurrentLocation] = useState<string>("London")
+  const [currentTempState, setCurrentTempState] = useState<CurrentTempState>({
+    currentTemp: null,
+    currentLocation: null,
+    locationSelected: false,
+    locations: locations,
+  })
 
   function handleClick(location: string) {
     const { temp, city_name }: { temp: number; city_name: string } =
       data[location].data[0]
-    setCurrentTemp(temp)
-    setCurrentLocation(city_name)
+
+    setCurrentTempState((prevState) => ({
+      ...prevState,
+      currentTemp: temp,
+      currentLocation: city_name,
+      locationSelected: true,
+    }))
   }
 
   function createLocationButtons() {
-    const locations = ["London", "New York", "Mumbai", "Sydney", "Tokyo"]
     return locations.map((location) => {
       return (
         <button
@@ -29,10 +45,10 @@ export default function CurrentTemp() {
     })
   }
 
-  return (
-    <div className="current-temp-container">
-      <div className="location-buttons">{createLocationButtons()}</div>
-      <div className="current-temp-info-container">
+  function displayTemperature() {
+    const { currentLocation, currentTemp, locationSelected } = currentTempState
+    return locationSelected ? (
+      <>
         <div className="current-temp-info">
           <div className="current-location">{currentLocation}</div>
           <div className="current-temp">{currentTemp}°</div>
@@ -45,7 +61,16 @@ export default function CurrentTemp() {
             16 day forecast
           </Link>
         </div>
-      </div>
+      </>
+    ) : (
+      <div>Select a location to view the current temperature!</div>
+    )
+  }
+
+  return (
+    <div className="current-temp-container">
+      <div className="location-buttons">{createLocationButtons()}</div>
+      <div className="current-temp-info-container">{displayTemperature()}</div>
     </div>
   )
 }
