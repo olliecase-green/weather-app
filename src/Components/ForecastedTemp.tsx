@@ -45,22 +45,23 @@ export default function ForecastedTemp() {
     async function getLocationData() {
       try {
         if (
-          forecastedTempState.currentLatitude !== null &&
-          forecastedTempState.currentLongitude !== null
-        ) {
-          const forecastDataFullObj = await fetchLocationTemp(
-            "https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily",
-            forecastedTempState.currentLongitude,
-            forecastedTempState.currentLatitude
-          )
-          const forecastData: ForecastWeatherDay[] =
-            forecastDataFullObj?.data?.data
+          !forecastedTempState.currentLatitude ||
+          !forecastedTempState.currentLongitude
+        )
+          return
 
-          setForecastedTempState((prevState) => ({
-            ...prevState,
-            forecastData: forecastData,
-          }))
-        }
+        const forecastDataFullObj = await fetchLocationTemp(
+          "https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily",
+          forecastedTempState.currentLongitude,
+          forecastedTempState.currentLatitude
+        )
+        const forecastData: ForecastWeatherDay[] =
+          forecastDataFullObj?.data?.data
+
+        setForecastedTempState((prevState) => ({
+          ...prevState,
+          forecastData: forecastData,
+        }))
       } catch (e) {
         console.error(e)
       }
@@ -93,12 +94,12 @@ export default function ForecastedTemp() {
         return (
           <div key={item.ts} className="temp-info">
             <div>Day {index + 1}</div>
-            <div>{item.temp}°</div>
+            <div>{item.temp.toFixed(1)}°</div>
           </div>
         )
       })
 
-      const daysInTempRange = mappedData.some((data: any) => data !== null)
+      const daysInTempRange = mappedData.some((data) => data !== null)
       return daysInTempRange ? (
         mappedData
       ) : (
@@ -109,6 +110,12 @@ export default function ForecastedTemp() {
 
   function displayInputText(value: NumberOrNull) {
     return value !== null ? value.toString() : ""
+  }
+
+  function displayErrorMessage() {
+    const { minTemp, maxTemp } = forecastedTempState
+    if (!minTemp || !maxTemp) return
+    if (minTemp > maxTemp) return <>Invalid range!</>
   }
 
   return (
@@ -145,6 +152,7 @@ export default function ForecastedTemp() {
               onChange={handleInputChange}
             />
           </div>
+          <div className="error">{displayErrorMessage()}</div>
           <div className="forecast-link-container">
             <Link to={"/"}>View other cities</Link>
           </div>

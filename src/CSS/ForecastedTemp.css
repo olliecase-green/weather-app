@@ -63,6 +63,10 @@
   margin: 16px 0 0 0;
 }
 
+.error {
+  color: #ff6666;
+}
+
 @media screen and (min-width: 420px) {
   .input-container {
     width: 300px;
