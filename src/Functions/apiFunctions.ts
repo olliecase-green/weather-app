@@ -9,7 +9,7 @@ export async function fetchLocationTemp(url: string, lon: string, lat: string) {
       lat: lat,
     },
     headers: {
-      "X-RapidAPI-Key": "adb4b1b42emsh1808efd20aa97e3p134efcjsn3eaa1cd36220",
+      "X-RapidAPI-Key": "API-KEY-HERE",
       "X-RapidAPI-Host": "weatherbit-v1-mashape.p.rapidapi.com",
     },
   }
