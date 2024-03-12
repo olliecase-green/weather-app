@@ -44,7 +44,9 @@ export interface ForecastedTempState {
   minTemp: NumberOrNull
   maxTemp: NumberOrNull
   currentLocation: StringOrNull
-  forecastData: any
+  forecastData: ForecastWeatherDay[] | null
+  currentLongitude: string
+  currentLatitude: string
 }
 
 export interface LocationState {
