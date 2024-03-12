@@ -1,10 +1,13 @@
-# Getting Started with Create React App
+# Welcome to the Weather App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was created with React and TypeScript.
 
-## Available Scripts
+## Getting started
 
-In the project directory, you can run:
+To run this app, follow the steps below:
+
+1. Using the green `<> Code` button, copy the link and git clone the app on your local machine
+2. If you don't have `Node.js` installed on your machine, visit this link to download it: https://nodejs.org/en/download
 
 ### `npm start`
 
