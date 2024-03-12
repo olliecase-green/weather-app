@@ -17,7 +17,8 @@ headers: {
 }
 ```
 6. Navigate to the weather-app directory and run npm install - this should install all of the necessary dependencies, such as axios
-7. You can now use npm start to run the application
+7. Edit the apiFunctions.ts file and paste the API key into `X-RapidAPI-Key`
+8. You can now use npm start to run the application
 
 ### `npm start`
 
