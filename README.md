@@ -16,7 +16,7 @@ To run this app, follow the steps below:
     'X-RapidAPI-Key': API-KEY-HERE
 }
 ```
-6. Edit the `apiFunctions.ts` file (this can be found in src -> apiFunctions) and paste the API key into `X-RapidAPI-Key`
+6. Edit the `weatherApiConnector.ts` file (this can be found in src -> Connectors) and paste the API key into `X-RapidAPI-Key`
 7. Open a terminal, navigate to the weather-app directory and run `npm install` - this should install all of the necessary dependencies, such as axios
 8. You can now use `npm start` to run the application
 
