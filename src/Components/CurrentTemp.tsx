@@ -54,6 +54,9 @@ export default function CurrentTemp() {
         }))
       } catch (e) {
         console.error(e)
+        window.alert(
+          "Something went wrong during the API call - please see console for more information. Is your API key correct?"
+        )
       }
     } else {
       // Data is stored in state so no extra API call necessary
