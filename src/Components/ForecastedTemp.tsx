@@ -16,8 +16,8 @@ export default function ForecastedTemp() {
       maxTemp: null,
       currentLocation: null,
       forecastData: null,
-      currentLongitude: "",
-      currentLatitude: "",
+      currentLongitude: null,
+      currentLatitude: null,
     })
   const location = useLocation()
   const navigate = useNavigate()
@@ -36,31 +36,40 @@ export default function ForecastedTemp() {
         currentLongitude: currentLongitude,
         currentLatitude: currentLatitude,
       }))
-
-      getLocationData()
     } catch (e) {
       navigate("/")
     }
   }, [])
 
-  async function getLocationData() {
-    try {
-      const { currentLongitude, currentLatitude } = forecastedTempState
-      const forecastDataFullObj = await fetchLocationTemp(
-        "https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily",
-        currentLongitude,
-        currentLatitude
-      )
-      const forecastData: ForecastWeatherDay[] = forecastDataFullObj?.data?.data
+  useEffect(() => {
+    async function getLocationData() {
+      try {
+        if (
+          forecastedTempState.currentLatitude !== null &&
+          forecastedTempState.currentLongitude !== null
+        ) {
+          const forecastDataFullObj = await fetchLocationTemp(
+            "https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily",
+            forecastedTempState.currentLongitude,
+            forecastedTempState.currentLatitude
+          )
+          const forecastData: ForecastWeatherDay[] =
+            forecastDataFullObj?.data?.data
 
-      setForecastedTempState((prevState) => ({
-        ...prevState,
-        forecastData: forecastData,
-      }))
-    } catch (e) {
-      console.error(e)
+          setForecastedTempState((prevState) => ({
+            ...prevState,
+            forecastData: forecastData,
+          }))
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
-  }
+    getLocationData()
+  }, [
+    forecastedTempState.currentLatitude,
+    forecastedTempState.currentLongitude,
+  ])
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
