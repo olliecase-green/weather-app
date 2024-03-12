@@ -6,7 +6,7 @@ import {
   LocationState,
   NumberOrNull,
 } from "../Config/types"
-import { fetchLocationTemp } from "../Functions/apiFunctions"
+import { fetchLocationTemp } from "../Connectors/weatherApiConnector"
 import "../CSS/ForecastedTemp.css"
 
 export default function ForecastedTemp() {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { locations } from "../Config/config"
 import { CurrentTempState, NumberOrNull } from "../Config/types"
-import { fetchLocationTemp } from "../Functions/apiFunctions"
+import { fetchLocationTemp } from "../Connectors/weatherApiConnector"
 import "../CSS/CurrentTemp.css"
 
 export default function CurrentTemp() {
