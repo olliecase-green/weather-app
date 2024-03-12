@@ -23,16 +23,20 @@ export default function ForecastedTemp() {
 
   useEffect(() => {
     async function getLocationData() {
-      const forecastData = await fetchLocationTemp(
-        "https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily",
-        currentLongitude,
-        currentLatitude
-      )
-      console.log(forecastData)
-      setForecastedTempState((prevState) => ({
-        ...prevState,
-        forecastData: forecastData,
-      }))
+      try {
+        const forecastData = await fetchLocationTemp(
+          "https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily",
+          currentLongitude,
+          currentLatitude
+        )
+        console.log(forecastData)
+        setForecastedTempState((prevState) => ({
+          ...prevState,
+          forecastData: forecastData,
+        }))
+      } catch (e) {
+        console.error(e)
+      }
     }
     getLocationData()
   }, [])

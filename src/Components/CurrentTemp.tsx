@@ -38,19 +38,23 @@ export default function CurrentTemp() {
   async function handleClick(location: string, lon: string, lat: string) {
     // Data does not exist in state
     if (!currentTempState[location]) {
-      const data = await fetchLocationTemp(
-        "https://weatherbit-v1-mashape.p.rapidapi.com/current",
-        lon,
-        lat
-      )
-      const { temp, city_name }: { temp: number; city_name: string } =
-        data?.data?.data?.[0]
-      setCurrentTempState((prevState) => ({
-        ...prevState,
-        currentTemp: temp,
-        currentLocation: city_name,
-        [location]: temp,
-      }))
+      try {
+        const data = await fetchLocationTemp(
+          "https://weatherbit-v1-mashape.p.rapidapi.com/current",
+          lon,
+          lat
+        )
+        const { temp, city_name }: { temp: number; city_name: string } =
+          data?.data?.data?.[0]
+        setCurrentTempState((prevState) => ({
+          ...prevState,
+          currentTemp: temp,
+          currentLocation: city_name,
+          [location]: temp,
+        }))
+      } catch (e) {
+        console.error(e)
+      }
     } else {
       // Data is stored in state so no extra API call necessary
       const temp = currentTempState[location] as NumberOrNull
