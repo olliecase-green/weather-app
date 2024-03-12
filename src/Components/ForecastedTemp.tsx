@@ -86,7 +86,7 @@ export default function ForecastedTemp() {
     const forecastedData = forecastedTempState.forecastData
     if (forecastedData) {
       const mappedData = forecastedData.map((item, index) => {
-        const { temp }: { temp: number } = item
+        const { temp } = item
         const { minTemp, maxTemp } = forecastedTempState
         const aboveMinTemp = minTemp === null || temp > minTemp
         const belowMaxTemp = maxTemp === null || temp < maxTemp
