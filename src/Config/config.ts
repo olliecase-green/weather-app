@@ -6,7 +6,7 @@ export const locations = [
     lon: "-0.1276",
   },
   {
-    name: "New York",
+    name: "New York City",
     lat: "40.7128",
     lon: "-74.006",
   },
