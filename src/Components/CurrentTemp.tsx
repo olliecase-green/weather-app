@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { locations, CurrentTempState, NumberOrNull } from "../Config/config"
+import { locations } from "../Config/config"
+import { CurrentTempState, NumberOrNull } from "../Config/types"
 import { fetchLocationTemp } from "../Functions/apiFunctions"
 import "../CSS/CurrentTemp.css"
 

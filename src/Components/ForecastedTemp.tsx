@@ -5,7 +5,7 @@ import {
   ForecastWeatherDay,
   LocationState,
   NumberOrNull,
-} from "../Config/config"
+} from "../Config/types"
 import { fetchLocationTemp } from "../Functions/apiFunctions"
 import "../CSS/ForecastedTemp.css"
 
