@@ -18,24 +18,6 @@ export default function CurrentTemp() {
     Tokyo: null,
   })
 
-  useEffect(() => {
-    const currentLocation = currentTempState.currentLocation
-    if (currentLocation) {
-      const loc = locations.find(
-        (location) => location.name === currentLocation
-      )
-      if (loc) {
-        const lon = loc.lon
-        const lat = loc.lat
-        setCurrentTempState((prevState) => ({
-          ...prevState,
-          currentLongitude: lon,
-          currentLatitude: lat,
-        }))
-      }
-    }
-  }, [currentTempState.currentLocation])
-
   async function handleClick(location: string, lon: string, lat: string) {
     // Data does not exist in state
     if (!currentTempState[location]) {
@@ -51,6 +33,8 @@ export default function CurrentTemp() {
           ...prevState,
           currentTemp: temp,
           currentLocation: city_name,
+          currentLongitude: lon,
+          currentLatitude: lat,
           [location]: temp,
         }))
       } catch (e) {
@@ -66,6 +50,8 @@ export default function CurrentTemp() {
         ...prevState,
         currentTemp: temp,
         currentLocation: location,
+        currentLongitude: lon,
+        currentLatitude: lat,
       }))
     }
   }
