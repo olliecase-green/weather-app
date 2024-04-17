@@ -2,6 +2,8 @@
 
 This project was created with React and TypeScript.
 
+In this app, users can view the current temperature in five major world cities: London, New York, Mumbai, Sydney and Tokyo. Users can also click through to see a 16 day forecast for each city.
+
 ## Getting started
 
 To run this app, follow the steps below:
